@@ -90,7 +90,7 @@ begin
                             data_mem_we_o <= '0';   -- disables writing data
                             alu_src_b_o <= '1';     -- uses the immediate value for PC + Imm
                             alu_src_a_o <= '1';     -- uses the PC value for PC+ Imm
-                            rd_we_o <= '0';          -- enables writing output to register bank
+                            rd_we_o <= '1';          -- enables writing output to register bank
                             rs1_in_use_o <= '0';    -- PROVJERI **
                             rs2_in_use_o <= '0';    -- PROVJERI **                       
                             alu_2bit_op_o <= "00";   -- PROVJERI ZA AUIPC (Should be 00 BCS it should only add and immediate value could make it do something else)

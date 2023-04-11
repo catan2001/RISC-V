@@ -210,9 +210,9 @@ begin
         shifter_output_id <= immediate_id(30 downto 0)&'0';
     end process;
 
-    adder: process(if_id_reg_in2, shifter_output_id) is
+    adder: process(if_id_reg_out2, shifter_output_id) is
     begin
-        if_id_reg_outside_fixed <= std_logic_vector(unsigned(if_id_reg_in2) + unsigned(shifter_output_id));
+        if_id_reg_outside_fixed <= std_logic_vector(unsigned(if_id_reg_out2) + unsigned(shifter_output_id));
     end process;
 
     id_ex_reg: process(clk) is
