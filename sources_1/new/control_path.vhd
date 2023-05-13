@@ -51,6 +51,7 @@ entity control_path is
     -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade
     alu_forward_a_o : out std_logic_vector (1 downto 0);
     alu_forward_b_o : out std_logic_vector (1 downto 0);
+    sw_forward_o : out std_logic_vector(1 downto 0);
     branch_forward_a_o : out std_logic; -- mux a
     branch_forward_b_o : out std_logic; -- mux b
     -- kontrolni signal za resetovanje if/id registra
@@ -197,6 +198,7 @@ begin
         -- izlazi za prosledjivanje operanada ALU jedinici
         alu_forward_a_o => alu_forward_a_o,
         alu_forward_b_o => alu_forward_b_o,
+        sw_forward_o => sw_forward_o,
         -- izlazi za prosledjivanje operanada komparatoru za odredjivanje uslova skoka
         branch_forward_a_o => branch_forward_a_o,
         branch_forward_b_o => branch_forward_b_o

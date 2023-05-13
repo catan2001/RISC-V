@@ -57,6 +57,7 @@ port(
     alu_forward_b_i : in std_logic_vector (1 downto 0);
     branch_forward_a_i : in std_logic;
     branch_forward_b_i : in std_logic;
+    sw_forward_i : in std_logic_vector (1 downto 0);
     -- kontrolni signal za resetovanje if/id registra
     if_id_flush_i : in std_logic;
     -- kontrolni signali za zaustavljanje protocne obrade
@@ -77,6 +78,7 @@ architecture Behavioral of data_path is
     signal  id_ex_reg_out1, id_ex_reg_out2, id_ex_reg_out3, id_ex_reg_out4, id_ex_reg_out5, id_ex_reg_out6: std_logic_vector(31 downto 0):= (others => '0');
     signal mux_a_ex1, mux_a_ex2, mux_b_ex1, mux_b_ex2: std_logic_vector(31 downto 0) := (others => '0');
     signal alu_result: std_logic_vector(31 downto 0) := (others => '0');
+    signal mux_sw: std_logic_vector(31 downto 0);
     --MEMORY PHASE
     signal ex_mem_reg_out1, ex_mem_reg_out2, ex_mem_reg_out3: std_logic_vector(31 downto 0) := (others => '0');
     -- WRITE BACK
@@ -94,19 +96,6 @@ begin
             mux_out_pc_if <= adder_out_if;
         else
             mux_out_pc_if <= if_id_reg_outside_fixed;
-        end if;
-    end process;
-
-    program_counter: process(clk, pc_en_i) is 
-    begin
-        if(rising_edge(clk)) then
-            if(reset = '1') then
-                if(pc_en_i = '1') then
-                    pc_out_if <= mux_out_pc_if;
-                end if;
-            else
-                pc_out_if <= (others => '0');
-            end if;
         end if;
     end process;
 
@@ -290,12 +279,25 @@ begin
         res_o => alu_result
         );
 
+    mux_sw1: process(sw_forward_i, id_ex_reg_out4, mux_mem_to_reg_wb, ex_mem_reg_out1) is  -- ADDED?
+    begin
+        if(sw_forward_i = "00") then
+            mux_sw <= id_ex_reg_out4;
+        elsif(sw_forward_i = "01") then
+            mux_sw <= mux_mem_to_reg_wb;
+        elsif(sw_forward_i = "10") then
+            mux_sw <= ex_mem_reg_out1;
+        else
+            mux_sw <= (others => '0');
+        end if;    
+    end process;
+
     ex_mem_reg: process(clk) is
     begin
         if(rising_edge(clk)) then
             if(reset = '1') then
                 ex_mem_reg_out1 <= alu_result;
-                ex_mem_reg_out2 <= id_ex_reg_out4;
+                ex_mem_reg_out2 <= mux_sw;
                 ex_mem_reg_out3 <= id_ex_reg_out5;
             else
                 ex_mem_reg_out1 <= (others => '0');

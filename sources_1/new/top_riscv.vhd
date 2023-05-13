@@ -49,7 +49,7 @@ end top_riscv;
 architecture Behavioral of top_riscv is
     signal pc_next_sel_s, if_id_flush_s, pc_en_s, if_id_en_s, branch_condition_s, rd_we_s, branch_forward_a_s, branch_forward_b_s: std_logic;
     signal alu_src_a_s, alu_src_b_s, mem_to_reg_s: std_logic;
-    signal alu_forward_a_s, alu_forward_b_s: std_logic_vector(1 downto 0);
+    signal alu_forward_a_s, alu_forward_b_s, sw_forward_s: std_logic_vector(1 downto 0);
     signal alu_op_s: std_logic_vector(4 downto 0);
     signal instruction_s : std_logic_vector(31 downto 0);
 begin
@@ -77,6 +77,7 @@ begin
         -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade
         alu_forward_a_i => alu_forward_a_s,
         alu_forward_b_i => alu_forward_b_s,
+        sw_forward_i => sw_forward_s,
         branch_forward_a_i => branch_forward_a_s,
         branch_forward_b_i => branch_forward_b_s,
         -- kontrolni signal za resetovanje if/id registra
@@ -106,6 +107,7 @@ begin
         -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade
         alu_forward_a_o => alu_forward_a_s,
         alu_forward_b_o => alu_forward_b_s,
+        sw_forward_o => sw_forward_s,
         branch_forward_a_o => branch_forward_a_s,
         branch_forward_b_o => branch_forward_b_s,
         -- kontrolni signal za resetovanje if/id registra

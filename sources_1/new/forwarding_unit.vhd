@@ -48,6 +48,7 @@ entity forwarding_unit is
     -- izlazi za prosledjivanje operanada ALU jedinici
     alu_forward_a_o : out std_logic_vector (1 downto 0);
     alu_forward_b_o : out std_logic_vector(1 downto 0);
+    sw_forward_o : out std_logic_vector(1 downto 0); -- DODATNO
     -- izlazi za prosledjivanje operanada komparatoru za odredjivanje uslova skoka
     branch_forward_a_o : out std_logic;
     branch_forward_b_o : out std_logic);
@@ -60,6 +61,7 @@ begin
         begin
             alu_forward_a_o <= "00";
             alu_forward_b_o <= "00";
+            sw_forward_o <= "00";
 
             if(rd_we_wb_i = '1' and rd_address_wb_i /= "00000") then   
                 if(rs1_address_ex_i = rd_address_wb_i) then
@@ -67,6 +69,7 @@ begin
                 end if;
                 if(rs2_address_ex_i = rd_address_wb_i) then
                     alu_forward_b_o <= "01";
+                    sw_forward_o <= "01"; -- DODATNO
                 end if;
             end if;
             if(rd_we_mem_i = '1' and rd_address_mem_i /= "00000") then -- SVJEZIJI JE REZULTAT PA ZATO MEM IMA PRIORITET
@@ -75,6 +78,7 @@ begin
                 end if; 
                 if(rs2_address_ex_i = rd_address_mem_i) then
                     alu_forward_b_o <= "10";
+                    sw_forward_o <= "10";-- DODATNO
                 end if;
             end if ;
         end process;
